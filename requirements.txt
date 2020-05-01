@@ -1,0 +1,9 @@
+numpy
+scipy
+pandas
+pandas-datareader
+matplotlib
+sklearn
+keras
+keras-tuner
+xlrd
