@@ -51,7 +51,7 @@ def load_data(snv_corr=True):
     for i in range(raw.shape[0]):
         raw.loc[i, 'key_0'] = raw.loc[i,'key_0'].split('_')[2]
         
-    raw.rename(str, columns={'key_0': 'sample'}, inplace=True);
+    raw.rename(columns={'key_0': 'sample'}, inplace=True);
     raw.index = raw['sample'].values
     raw.drop('sample', axis=1, inplace=True)
     #raw.drop('B01', axis=0, inplace=True) # outlier
