@@ -22,7 +22,7 @@ def load_data(snv_corr=True):
     import pandas as pd
     from uv_nir_gos import SNV
 
-    UV = pd.read_excel('~/gos/UV.xlsx', sheet_name=0, header=0)
+    UV = pd.read_excel('~/UV.xlsx', sheet_name=0, header=0)
     UV.index = UV['code'].values
     UV.drop(['code', 'sample number'], axis=1, inplace=True)
     UV.drop(['A+1', 'A+2', 'B+1', 'B+2'], axis=0, inplace=True)
@@ -35,7 +35,7 @@ def load_data(snv_corr=True):
             new_idx[idx] = i[0] + str(0) + i[1]
     UV.index = new_idx
     
-    NIR = pd.read_csv('~/gos/raw.csv', index_col='Unnamed: 0')
+    NIR = pd.read_csv('~/raw.csv', index_col='Unnamed: 0')
     NIR.columns = np.linspace(780,2500,1102)
     NIR = NIR.iloc[:, (NIR.columns >= 1100) & (NIR.columns <=1501) | (NIR.columns >= 2200) & (NIR.columns <= 2451)] # select relevant wavelength ranges (based on Physics Dep.)
     
@@ -45,7 +45,7 @@ def load_data(snv_corr=True):
     
     UVsubset = UV.iloc[:, (UV.columns >= 190) & (UV.columns <=240) | (UV.columns >= 900) & (UV.columns <= 1100)]
     
-    comp = pd.read_csv('~/gos/comp.csv', index_col='Unnamed: 0')
+    comp = pd.read_csv('~/comp.csv', index_col='Unnamed: 0')
     raw = pd.merge(NIR, comp,on=NIR.index);
         
     for i in range(raw.shape[0]):
@@ -200,14 +200,14 @@ def plsregress(Train, Test, devcomp=None, spec='ALLr'):
         trainR2.append(train_R2)
     if devcomp != None:    
       resDF = pd.DataFrame([np.asarray(devR2)[devcomp,:],np.asarray(devMSE)[devcomp,:]], columns=Y.columns,index=['R2', 'MSE'])
-      resDF.to_csv('gos/results/resDF_'+str(spec)+'_PLSR_dev.csv')
+      resDF.to_csv('results/resDF_'+str(spec)+'_PLSR_dev.csv')
     # Plot results
     plt.plot(np.arange(1, 20), np.array(devMSE), '-o');
     plt.xlabel('Number of principal components in regression')
     plt.ylabel('MSE')
     plt.legend(Y.columns.to_list());
     plt.xlim(left=0, right=21)
-    plt.savefig('gos/results/PLSR_dev_' +spec+'.png')
+    plt.savefig('results/PLSR_dev_' +spec+'.png')
     plt.close()
 
 ######################################################################
@@ -247,11 +247,11 @@ def PLSR_test(Train, Test, ncomp, spec='UV'):
     #plt.legend(Y.columns.to_list());
     plt.xlim(0,100)
     plt.ylim(0,100)
-    plt.savefig('gos/results/PLSR_test_' +spec+'.png')
+    plt.savefig('results/PLSR_test_' +spec+'.png')
     plt.close()
 
     resDF = pd.DataFrame([test_R2,test_MSE], columns=Y_test.columns,index=['R2', 'MSE'])
-    resDF.to_csv('gos/results/resDF_'+str(spec)+'_PLSR_test.csv')
+    resDF.to_csv('results/resDF_'+str(spec)+'_PLSR_test.csv')
     print(resDF)
     return resDF
 
@@ -374,10 +374,10 @@ def train_ann(Train, Test, layersizes, opti = 'rmsprop', spec='UV', modeltype='f
     plt.ylabel('MSE')
     plt.legend(['train_MAE', 'val_MSE'])
     #plt.show()
-    plt.savefig('gos/results/ANN_dev_' +spec+'.png')
+    plt.savefig('results/ANN_dev_' +spec+'.png')
     #plt.close()
     resDF = pd.DataFrame([np.asarray(val_R2).mean(axis=0),np.asarray(val_MSE).mean(axis=0)],columns=Y.columns,index=['R2', 'MSE'])
-    resDF.to_csv('gos/results/resDF_'+str(spec)+'_ANN_dev.csv')
+    resDF.to_csv('results/resDF_'+str(spec)+'_ANN_dev.csv')
     print(resDF)
     return val_R2, val_MSE
 #################################################################
@@ -416,10 +416,10 @@ def ANN_test(Train, Test, layersizes, spec='UV', modeltype='ff'):
     #plt.legend(Y.columns.to_list());
     plt.xlim(0,100)
     plt.ylim(0,100)
-    plt.savefig('gos/results/ANN_test_' +spec+'.png')
+    plt.savefig('results/ANN_test_' +spec+'.png')
     plt.close()
     
     resDF = pd.DataFrame([test_R2,test_MSE], columns=Y_test.columns,index=['R2', 'MSE'])
-    resDF.to_csv('gos/results/resDF_'+str(spec)+'_ANN_test.csv')
+    resDF.to_csv('results/resDF_'+str(spec)+'_ANN_test.csv')
     print(resDF)
     return resDF
