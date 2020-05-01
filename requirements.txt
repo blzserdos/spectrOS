@@ -4,6 +4,7 @@ pandas
 pandas-datareader
 matplotlib
 sklearn
+tensorflow
 keras
 keras-tuner
 xlrd
