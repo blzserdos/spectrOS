@@ -22,7 +22,7 @@ def load_data(snv_corr=True):
     import pandas as pd
     from uv_nir_gos import SNV
 
-    UV = pd.read_excel('~/UV.xlsx', sheet_name=0, header=0)
+    UV = pd.read_excel('UV.xlsx', sheet_name=0, header=0)
     UV.index = UV['code'].values
     UV.drop(['code', 'sample number'], axis=1, inplace=True)
     UV.drop(['A+1', 'A+2', 'B+1', 'B+2'], axis=0, inplace=True)
@@ -35,7 +35,7 @@ def load_data(snv_corr=True):
             new_idx[idx] = i[0] + str(0) + i[1]
     UV.index = new_idx
     
-    NIR = pd.read_csv('~/raw.csv', index_col='Unnamed: 0')
+    NIR = pd.read_csv('raw.csv', index_col='Unnamed: 0')
     NIR.columns = np.linspace(780,2500,1102)
     NIR = NIR.iloc[:, (NIR.columns >= 1100) & (NIR.columns <=1501) | (NIR.columns >= 2200) & (NIR.columns <= 2451)] # select relevant wavelength ranges (based on Physics Dep.)
     
@@ -45,7 +45,7 @@ def load_data(snv_corr=True):
     
     UVsubset = UV.iloc[:, (UV.columns >= 190) & (UV.columns <=240) | (UV.columns >= 900) & (UV.columns <= 1100)]
     
-    comp = pd.read_csv('~/comp.csv', index_col='Unnamed: 0')
+    comp = pd.read_csv('comp.csv', index_col='Unnamed: 0')
     raw = pd.merge(NIR, comp,on=NIR.index);
         
     for i in range(raw.shape[0]):
